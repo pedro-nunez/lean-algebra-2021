@@ -1,0 +1,154 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[british]{babel}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{libertine}
+\usepackage[libertine]{newtxmath}
+\usepackage[mathscr]{euscript}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usetikzlibrary{decorations.markings}
+\usepackage{float}
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ total={170mm,257mm},
+ left=20mm,
+ top=30mm,
+ }
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\urlstyle{same}
+\usepackage[noabbrev]{cleveref}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{listings}
+
+% Colors to match VS Code Lean 4 Light Theme
+\definecolor{keywordcolor}{rgb}{0.0, 0.0, 1.0}   % blue
+\definecolor{tacticcolor}{rgb}{0.0, 0.0, 1.0}    % blue
+\definecolor{commentcolor}{rgb}{0.0, 0.5, 0.0}   % green
+\definecolor{symbolcolor}{rgb}{0.0, 0.0, 0.0}    % black
+\definecolor{sortcolor}{rgb}{0.0, 0.0, 1.0}      % blue
+\definecolor{attributecolor}{rgb}{0.0, 0.0, 0.0} % black
+% Light gray background color
+\definecolor{codebg}{rgb}{0.97, 0.97, 0.97}
+
+\def\lstlanguagefiles{lstlean.tex}
+
+\newtcblisting{leancode}{
+  listing only,
+  listing options={
+    language=lean,
+    emph={sorry},
+    emphstyle=\color{red},
+    basicstyle=\ttfamily\footnotesize
+  },
+  colback=codebg,
+  colframe=codebg,
+  boxrule=0pt,
+  arc=3mm,
+  auto outer arc,
+  top=10pt,
+  bottom=10pt,
+  left=5pt,
+  right=5pt,
+  width=\textwidth,
+}
+
+\theoremstyle{definition}
+\newtheorem{innercustomthm}{Exercise}
+\newenvironment{xca}[1] {\renewcommand\theinnercustomthm{#1}\innercustomthm}
+  {\endinnercustomthm}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Lean Algebra Exercises{\renewcommand{\thefootnote}{\fnsymbol{footnote}}\footnotemark[2]}}
+\chead{Normal Subgroup}
+\lhead{Pedro N\'{u}\~{n}ez}
+% \rfoot{Page \thepage}
+
+\title{Lean Algebra Exercise 2.1}
+\author{Pedro N\'{u}\~{n}ez}
+
+\setcounter{tocdepth}{1}
+\sloppy
+\makeatletter
+\hypersetup{
+  pdfauthor={\@author},
+  pdftitle={\@title},
+  colorlinks,
+  linkcolor=[rgb]{0.2,0.2,0.6},
+  citecolor=[rgb]{0.2,0.2,0.6},
+  urlcolor=[rgb]{0.2,0.2,0.6}}
+\makeatother
+
+\begin{document}
+
+\begin{xca}{2.1}
+  Let $H \subset G$ be a subgroup.
+  Show that the following assertions are equivalent:
+  \begin{enumerate}[label=(\alph*)]
+    \item For all $g \in G$, $Hg = gH$.
+    \item For all $g \in G$, $g^{-1}Hg = H$.
+    \item For all $g \in G$, $g^{-1}Hg \subset H$.
+    \item For all $g_{1}, g_{2} \in G$, $g_{1}g_{2} \in H$ if and only if $g_{2}g_{1} \in H$.
+  \end{enumerate}
+
+  You can try to \href{https://live.lean-lang.org/#codez=JYWwDg9gTgLgBAWQIYwBYBtgCMB0BBdAcwFMsokcBxKCAVzBwGVatCb6cAhJAZ2AGMAUKEixEKDNhwAVJPxgCZAMTwBRQYIBuSKMCRZ0xOAG9KcAFxxpATzDEAvnADa1OmDiUAunAAUAOQs4ZlZ2d0oASg0AE2IAMzgAO2gQJHQAfSQLQTg4AAUad3MAXjhAACI4QkDKABoyuFRAv1rAYCJ6gHJG2sBEwgaAKgq4Esr%2B1DbouMTk1LSsLJz8iEKS8srLGt9yhssmuFbRzorAbwIATrgRs4GS0fC4QHIibI36g72O7e6GoZOL%2Ff7CSMEYvEklAUul%2BHM8gULMsBmtaptnu0DoQvudfoN2uMgVN0lEIQslnVCABGCoAJiqtR8e2RpN%2BFKuN0AKYS%2BGlvckXEkY1D%2FQwgFJwJBpESYYg8GYQ8r%2BQLBNhuDzhWrA0EZOABQBJhJMQdNZgFinAsNYHsAEjAaDw1YKeDxaOAYA9aAlYhB0HjldNMigrTa7Q8eNAoEbBGhiNBiCA4DBYkhiGl3ekbSF5eYHgAZYA8GDKNTOeOqnZ53VKnFpcEFkt4vzefWGh5RmNpVBITRGUmain6oUi4BiiV%2BOvR2NNltwCmagDM0INRpyOX9UEDA4bw6Mk81ABYp7XZ3B54ucvWh82jJvNaSazPZ3vL4e0rETRnUIIgA}{verify your solution to this exercise with Lean}.
+\end{xca}
+
+\subsection*{Hints for Lean}
+
+\begin{leancode}
+import Mathlib.Algebra.Group.Subgroup.Basic
+import Mathlib.Tactic.TFAE
+
+variable {G : Type} [Group G] (N : Subgroup G)
+
+def normal_a :
+  Prop := ∀ g : G, ∀ h : N, ∃ h' : N, ↑h * g = g * h'
+
+def normal_b :
+  Prop := ∀ g : G, (∀ h : N, ∃ h' : N, g⁻¹ * h * g = h') ∧
+  (∀ h : N, ∃ h' : N, ↑h = g⁻¹ * h' * g)
+
+def normal_c :
+  Prop := ∀ g : G, ∀ h : N, ∃ h' : N, g⁻¹ * h * g = h'
+
+def normal_d :
+  Prop := ∀ g1 g2 : G, (∃ h : N, g1 * g2 = h) ↔ (∃ h : N, g2 * g1 = h)
+
+lemma a_implies_b :
+  ∀ (N : Subgroup G), normal_a N → normal_b N := by
+  intros N assumpt
+  unfold normal_a at assumpt
+  sorry
+
+theorem tfae_normal_subgroup :
+  List.TFAE [normal_a N, normal_b N, normal_c N, normal_d N] := by
+  tfae_have 1 → 2 := a_implies_b N
+  tfae_have 2 → 3 := by
+    sorry
+  tfae_have 3 → 4 := by
+    sorry
+  tfae_have 4 → 1 := by
+    sorry
+  tfae_finish
+\end{leancode}
+
+You may find the \href{https://leanprover-community.github.io/mathlib4_docs/Mathlib/Algebra/Group/Subgroup/Basic.html}{subgroup documentation} on mathlib helpful.
+The vertical arrow $\uparrow$ {\ttfamily h} also shows up \href{https://github.com/leanprover-community/tutorials4/blob/master/Tutorials/Solutions/09LimitsFinal.lean}{somewhere in the lean 4 tutorials project}.
+A \href{https://github.com/pedro-nunez/lean-algebra-2021/blob/master/normal-subgroup/solution.lean}{solution} is available on the repository
+\begin{center}
+  \href{https://github.com/pedro-nunez/lean-algebra-2021}{https://github.com/pedro-nunez/lean-algebra-2021}.
+\end{center}
+
+{\renewcommand{\thefootnote}{\fnsymbol{footnote}}\footnotetext[2]{Exercises designed for the lecture \href{https://home.mathematik.uni-freiburg.de/arithgeom/lehre/ws21/azt}{\emph{Algebra and Number Theory}}, for which I was a teaching assistant.
+This was an introductory lecture on abstract algebra, polynomial rings and Galois theory, taught by Annette Huber-Klawitter at the University of Freiburg during the Winter Semester 2021/2022.}}
+
+\end{document}
