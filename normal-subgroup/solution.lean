@@ -23,28 +23,28 @@ lemma a_implies_b :
   unfold normal_b
   intro g
   constructor
-  intro h
-  specialize assumpt g h
-  rcases assumpt with ⟨h', assumpth'⟩
-  have new_eq : g⁻¹ * h * g = g⁻¹ * g * h' := by
-    rw [mul_assoc]
-    rw [assumpth']
-    rw [← mul_assoc]
-  have new_eq' : g⁻¹ * h * g = h' := by
-    rw [new_eq]
-    rw [inv_mul_cancel]
-    rw [one_mul]
-  use h'
-  intro h
-  specialize assumpt (g⁻¹) h
-  rcases assumpt with ⟨h', assumpth'⟩
-  use h'
-  have new_eq : ↑h * g⁻¹ * g = g⁻¹ * h' * g := by
-    rw [assumpth']
-  rw [mul_assoc] at new_eq
-  rw [inv_mul_cancel] at new_eq
-  simp at new_eq
-  assumption
+  · intro h
+    specialize assumpt g h
+    rcases assumpt with ⟨h', assumpth'⟩
+    have new_eq : g⁻¹ * h * g = g⁻¹ * g * h' := by
+      rw [mul_assoc]
+      rw [assumpth']
+      rw [← mul_assoc]
+    have new_eq' : g⁻¹ * h * g = h' := by
+      rw [new_eq]
+      rw [inv_mul_cancel]
+      rw [one_mul]
+    use h'
+  · intro h
+    specialize assumpt (g⁻¹) h
+    rcases assumpt with ⟨h', assumpth'⟩
+    use h'
+    have new_eq : ↑h * g⁻¹ * g = g⁻¹ * h' * g := by
+      rw [assumpth']
+    rw [mul_assoc] at new_eq
+    rw [inv_mul_cancel] at new_eq
+    simp at new_eq
+    assumption
 
 lemma b_implies_c :
   ∀ (N : Subgroup G), normal_b N → normal_c N := by
@@ -63,25 +63,25 @@ lemma c_implies_d :
   unfold normal_d
   intros N assumpt g g'
   constructor
-  intro assumpt2
-  specialize assumpt g
-  rcases assumpt2 with ⟨h', assumpth'⟩
-  specialize assumpt h'
-  rcases assumpt with ⟨h, assumpth⟩
-  use h
-  rw [← assumpth'] at assumpth
-  simp at assumpth
-  assumption
-  intro assumpt2
-  specialize assumpt (g⁻¹)
-  rcases assumpt2 with ⟨h', assumpth'⟩
-  specialize assumpt h'
-  rcases assumpt with ⟨h, assumpth⟩
-  use h
-  rw [← assumpth'] at assumpth
-  rw [← assumpth]
-  rw [mul_assoc]
-  simp
+  · intro assumpt2
+    specialize assumpt g
+    rcases assumpt2 with ⟨h', assumpth'⟩
+    specialize assumpt h'
+    rcases assumpt with ⟨h, assumpth⟩
+    use h
+    rw [← assumpth'] at assumpth
+    simp at assumpth
+    assumption
+  · intro assumpt2
+    specialize assumpt (g⁻¹)
+    rcases assumpt2 with ⟨h', assumpth'⟩
+    specialize assumpt h'
+    rcases assumpt with ⟨h, assumpth⟩
+    use h
+    rw [← assumpth'] at assumpth
+    rw [← assumpth]
+    rw [mul_assoc]
+    simp
 
 lemma d_implies_a :
   ∀ (N : Subgroup G), normal_d N → normal_a N := by

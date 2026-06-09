@@ -1,0 +1,155 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[british]{babel}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{libertine}
+\usepackage[libertine]{newtxmath}
+\usepackage[mathscr]{euscript}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usetikzlibrary{decorations.markings}
+\usepackage{float}
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ total={170mm,257mm},
+ left=20mm,
+ top=30mm,
+ }
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\urlstyle{same}
+\usepackage[noabbrev]{cleveref}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{listings}
+
+% Colors to match VS Code Lean 4 Light Theme
+\definecolor{keywordcolor}{rgb}{0.0, 0.0, 1.0}   % blue
+\definecolor{tacticcolor}{rgb}{0.0, 0.0, 1.0}    % blue
+\definecolor{commentcolor}{rgb}{0.0, 0.5, 0.0}   % green
+\definecolor{symbolcolor}{rgb}{0.0, 0.0, 0.0}    % black
+\definecolor{sortcolor}{rgb}{0.0, 0.0, 1.0}      % blue
+\definecolor{attributecolor}{rgb}{0.0, 0.0, 0.0} % black
+% Light gray background color
+\definecolor{codebg}{rgb}{0.97, 0.97, 0.97}
+
+\def\lstlanguagefiles{lstlean.tex}
+
+\newtcblisting{leancode}{
+  listing only,
+  listing options={
+    language=lean,
+    emph={sorry},
+    emphstyle=\color{red},
+    basicstyle=\ttfamily\footnotesize
+  },
+  colback=codebg,
+  colframe=codebg,
+  boxrule=0pt,
+  arc=3mm,
+  auto outer arc,
+  top=10pt,
+  bottom=10pt,
+  left=5pt,
+  right=5pt,
+  width=\textwidth,
+}
+
+\theoremstyle{definition}
+\newtheorem{innercustomthm}{Exercise}
+\newenvironment{xca}[1] {\renewcommand\theinnercustomthm{#1}\innercustomthm}
+  {\endinnercustomthm}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Lean Algebra Exercises{\renewcommand{\thefootnote}{\fnsymbol{footnote}}\footnotemark[2]}}
+\chead{Equivalence Relation}
+\lhead{Pedro N\'{u}\~{n}ez}
+% \rfoot{Page \thepage}
+
+\title{Lean Algebra Exercise 3.2}
+\author{Pedro N\'{u}\~{n}ez}
+
+\setcounter{tocdepth}{1}
+\sloppy
+\makeatletter
+\hypersetup{
+  pdfauthor={\@author},
+  pdftitle={\@title},
+  colorlinks,
+  linkcolor=[rgb]{0.2,0.2,0.6},
+  citecolor=[rgb]{0.2,0.2,0.6},
+  urlcolor=[rgb]{0.2,0.2,0.6}}
+\makeatother
+
+\begin{document}
+
+\begin{xca}{3.2}
+  Let $G$ be a group and let $H \subset G$ be a subgroup.
+  \begin{enumerate}[label=(\alph*)]
+    \item Show that $g_{1} \sim g_{2} : \Leftrightarrow g_{1}^{-1}g_{2} \in H$ defines an equivalence relation on $G$.
+    \item Use part (a) of this exercise to show that any two cosets in $G$ are either equal or disjoint.
+  \end{enumerate}
+
+  You can try to \href{https://live.lean-lang.org/#codez=JYWwDg9gTgLgBAWQIYwBYBtgCMB0BBdAcwFMsokcBxKCAVzBwGVatCb6cAhJAZ2AGMAUIIBuSKMCRZ0xOAG9KcAFxwAKgE8wxAL5wA2tTpg4lALpwAFAAllcZq3bHKASmEATYgDM4AJWLpLGxV7NiMTZ0tCOEIAclsXWwAFGmMlAF5owG8CAE64ACpouMAIIjgrYRkQECRffwB9YB5a4gBHWmAxGQA7fmJaqH8UYAhO2wBRVvakLp7LPwCrCPS4LHVBODh%2BYZ4YKFp%2BGGg1uAB2uB5oKFX10%2FOoS6Obi%2FUgA}{verify part (a) of this exercise with Lean}.
+\end{xca}
+
+\subsection*{Hints for Lean}
+
+\begin{leancode}
+  import Mathlib.Algebra.Group.Subgroup.Basic
+
+  variable {G : Type} [Group G] (H : Subgroup G)
+
+  def Rel (H : Subgroup G) (g g' : G) : Prop := g⁻¹ * g' ∈ H
+
+  lemma Rel_is_equivalence_relation : Equivalence (Rel H) := by
+    constructor
+    · sorry
+    · sorry
+    · sorry
+\end{leancode}
+
+A relation $R$ on a set $M$ is usually defined as a subset of $M \times M$.
+In Lean, however, a relation on $M$ is defined as a function $M \to M \to $~{\ttfamily Prop}.
+The idea is that for each $x, y \in M$ we obtain a proposition $P(x,y)$ which is {\ttfamily true} precisely when $(x,y) \in R$.
+In our example, the function $\mathrm{Rel}$ sends $g \in G$ to the function that sends $g' \in G$ to the statement $g^{-1} \cdot g' \in H$.
+You can read more about this on
+\begin{center}
+  \href{https://leanprover-community.github.io/logic_and_proof/relations_in_lean.html}{https://leanprover-community.github.io/logic\_and\_proof/relations\_in\_lean.html}.
+\end{center}
+
+The {\ttfamily constructor} tactic splits the current goal into three subgoals,
+one for each defining property of an equivalence relation.
+The bullet points are syntax to separate the three subgoals.
+
+A \href{https://github.com/pedro-nunez/lean-algebra-2021/blob/master/equivalence-relation/solution.lean}{solution} is available on the repository
+\begin{center}
+  \href{https://github.com/pedro-nunez/lean-algebra-2021}{https://github.com/pedro-nunez/lean-algebra-2021}.
+\end{center}
+
+\subsection*{Lean's search tactics}
+
+Many simple statements are already implemented in mathlib.
+The {\ttfamily exact?} tactic searches for results already proven in mathlib
+that can help solve the current goal.
+For the first {\ttfamily sorry} above, try the following:
+
+\begin{leancode}
+  intro g
+  unfold Rel
+  simp only [inv_mul_cancel]
+  exact?
+\end{leancode}
+
+Other search tactics you can try are {\ttfamily apply?}, {\ttfamily simp?} and {\ttfamily rw?}.
+
+{\renewcommand{\thefootnote}{\fnsymbol{footnote}}\footnotetext[2]{Exercises designed for the lecture \href{https://home.mathematik.uni-freiburg.de/arithgeom/lehre/ws21/azt}{\emph{Algebra and Number Theory}}, for which I was a teaching assistant.
+This was an introductory lecture on abstract algebra, polynomial rings and Galois theory, taught by Annette Huber-Klawitter at the University of Freiburg during the Winter Semester 2021/2022.}}
+
+\end{document}
