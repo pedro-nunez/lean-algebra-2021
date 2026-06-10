@@ -1,0 +1,136 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[british]{babel}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{libertine}
+\usepackage[libertine]{newtxmath}
+\usepackage[mathscr]{euscript}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usetikzlibrary{decorations.markings}
+\usepackage{float}
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ total={170mm,257mm},
+ left=20mm,
+ top=30mm,
+ }
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\urlstyle{same}
+\usepackage[noabbrev]{cleveref}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{listings}
+
+% Colors to match VS Code Lean 4 Light Theme
+\definecolor{keywordcolor}{rgb}{0.0, 0.0, 1.0}   % blue
+\definecolor{tacticcolor}{rgb}{0.0, 0.0, 1.0}    % blue
+\definecolor{commentcolor}{rgb}{0.0, 0.5, 0.0}   % green
+\definecolor{symbolcolor}{rgb}{0.0, 0.0, 0.0}    % black
+\definecolor{sortcolor}{rgb}{0.0, 0.0, 1.0}      % blue
+\definecolor{attributecolor}{rgb}{0.0, 0.0, 0.0} % black
+% Light gray background color
+\definecolor{codebg}{rgb}{0.97, 0.97, 0.97}
+
+\def\lstlanguagefiles{lstlean.tex}
+
+\newtcblisting{leancode}{
+  listing only,
+  listing options={
+    language=lean,
+    emph={sorry},
+    emphstyle=\color{red},
+    basicstyle=\ttfamily\footnotesize
+  },
+  colback=codebg,
+  colframe=codebg,
+  boxrule=0pt,
+  arc=3mm,
+  auto outer arc,
+  top=10pt,
+  bottom=10pt,
+  left=5pt,
+  right=5pt,
+  width=\textwidth,
+}
+
+\theoremstyle{definition}
+\newtheorem{innercustomthm}{Exercise}
+\newenvironment{xca}[1] {\renewcommand\theinnercustomthm{#1}\innercustomthm}
+  {\endinnercustomthm}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Lean Algebra Exercises{\renewcommand{\thefootnote}{\fnsymbol{footnote}}\footnotemark[2]}}
+\chead{Euclidean Division}
+\lhead{Pedro N\'{u}\~{n}ez}
+% \rfoot{Page \thepage}
+
+\title{Lean Algebra Exercise 4.1}
+\author{Pedro N\'{u}\~{n}ez}
+
+\setcounter{tocdepth}{1}
+\sloppy
+\makeatletter
+\hypersetup{
+  pdfauthor={\@author},
+  pdftitle={\@title},
+  colorlinks,
+  linkcolor=[rgb]{0.2,0.2,0.6},
+  citecolor=[rgb]{0.2,0.2,0.6},
+  urlcolor=[rgb]{0.2,0.2,0.6}}
+\makeatother
+
+\begin{document}
+
+\begin{xca}{4.1}
+  Let $n$ and $m \neq 0$ be two natural numbers.
+  Show that there exist unique natural numbers $a$ and $b$ such that $n = am + b$ with $b < m$.
+
+  You can try to \href{https://live.lean-lang.org/#codez=JYWwDg9gTgLgBAWQIYwBYBtgCMBQO0Cm0BIcBArgMaYAmBSAdgPo3ABuwAzsBA3ABR9SALjgA5FAEoBqEXFKADIjgAGacJxxNcQMBEAQjhI4oiTAA0O%2FViPiU5vgF4DcAFTy4AajhXA5ERe4AHjdhRywATw04VCQ2AkiQAHJrUgBaOABGD3S4RxEQ8K0DMDB0UJsYADpOciwmJBoaJkpGSgJ0CM0kIpKyyqpKJnQCJggAMwGYdrIADyRKeBNyyE5hsYYhgC8CKAg4iKiYuIHY0RSswNyvfK0oAHc4AG1ABMI4%2BIBdSYIZuZ70GCYqyj9TitEYCU5pSQRYAMGhUGA8Ph8G7ANARAA%2BcE222yAD5JslUgAFbajOA3VAERHZFTlSacaBQK4YgGUOB8YCoXH4okk0EjaBszJpcxIThVEDQgDmcEIcCgBCqvzgXBlUHIsX5UDZtIK9KgjKAA}{verify this exercise with Lean}.
+\end{xca}
+
+\subsection*{Hints for Lean}
+
+\begin{leancode}
+  import Mathlib
+
+  theorem euclidean_division (n m : Nat) (hm : m ≠ 0) :
+      ∃! a : Nat, ∃! b : Nat, n = a * m + b ∧ b < m := by
+    have hm' : m - 1 + 1 = m := by
+      apply Nat.sub_add_cancel
+      apply Nat.succ_le_of_lt
+      exact Nat.pos_of_ne_zero hm
+    have hm_le : m - 1 < m := by
+      rw [← hm']
+      exact Nat.lt_succ_self (m - 1)
+    induction n with
+    | zero =>
+      -- Proof when n = 0.
+      sorry
+    | succ n ih =>
+      -- Proof for n + 1, assuming the result is true for n.
+      sorry
+\end{leancode}
+
+When dealing with natural numbers, Lean uses \href{https://lean-lang.org/doc/reference/latest/Basic-Types/Natural-Numbers/#Nat___sub}{truncated subtraction}.
+So for example $3 - 5 = 0$.
+This means that the claims {\ttfamily hm'} and {\ttfamily hm\_le} above are not automatic.
+In particular, a tactic like {\ttfamily ring} will not be able to prove {\ttfamily hm'}.
+The \href{https://adam.math.hhu.de/#/g/leanprover-community/nng4}{Natural Number Game} may be useful to learn more about natural numbers in Lean.
+
+A \href{https://github.com/pedro-nunez/lean-algebra-2021/blob/master/euclidean-division/solution.lean}{solution} is available on the repository
+\begin{center}
+  \href{https://github.com/pedro-nunez/lean-algebra-2021}{https://github.com/pedro-nunez/lean-algebra-2021}.
+\end{center}
+
+{\renewcommand{\thefootnote}{\fnsymbol{footnote}}\footnotetext[2]{Exercises designed for the lecture \href{https://home.mathematik.uni-freiburg.de/arithgeom/lehre/ws21/azt}{\emph{Algebra and Number Theory}}, for which I was a teaching assistant.
+This was an introductory lecture on abstract algebra, polynomial rings and Galois theory, taught by Annette Huber-Klawitter at the University of Freiburg during the Winter Semester 2021/2022.}}
+
+\end{document}
