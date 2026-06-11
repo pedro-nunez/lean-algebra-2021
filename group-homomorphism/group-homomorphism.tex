@@ -99,7 +99,7 @@
   \end{enumerate}
   \href{https://leanprover-community.github.io/}{Lean} is a computer program that one can use to verify mathematical proofs.
   Our colleague Johan Commelin is currently working with Peter Scholze to verify the proof of one of his theorems with Lean.
-  You can try to \href{https://live.lean-lang.org/#codez=JYWwDg9gTgLgBAWQIYwBYBtgCMB0BBdAcwFMsokcBxKCAVzBwCEkBnYAYwChOBaHuAGLAoLeABNiAM2AA7YnCRx26VizjEZ7CGNmE4aeYRr04qCCHPQwqYCxAKAHsHM5Oy1XGp0wACXNwAb0pPAHI4AC44ABUATzBiAF84AG0vE0oAXRS0sFCsgApJCM84QCTCUIBKYoAFGlyAd1RiKGJOOFNzAH0QWnRiwAAiBTgsABo4IvzFACphqoBecaGZoqxuPmimmThRFHkkGTE4MBoAN3kDOAk2FsOWll6YVwNoYntQJBJOiEkvuUDgyhhSKxeJJVLGXKZbIQvJtOCFYrBcqAqrg7x%2BeySLKRIoARjgC3x4QWWBicJY0CgMTg6wAouQWPIKVAqQoDnAWmAVOx5MB4PU%2Bag4DE6FA4BB6ltjhBvgBCIA}{verify part (a) of this exercise with Lean}.
+  You can try to \href{https://live.lean-lang.org/#codez=JYWwDg9gTgLgBAWQIYwBYBtgCMB0BBdAcwFMsokcBxKCAVzBwBFiAzAZwCgOBabuAMWBQ28ACatgAO2JwkcAMbokbNnGKT5EUVMJw0MwjXpxUEEGehhUwNiFkAPYGZwdFy1dTpgAEmbgBvSjhKAHI4AC44ABUATzBiAF84AG1PY0oAXRS0sGCQrIAKFgjguEAkwjyAShKABRpcgHdUYihiDjgTMwB9EFp0EsAAIlk4LAAaOGKCuQAqEeqAXgnh2eKsLl5o5sk4ERQZJElRODAaADcZfThxNiFiI9a2PpgXfWhiO1AkEi6IFh%2FpAJBUIlWLxJKpIy5TLZSF5DLtOBFEpBCqhaoQry%2BOwsLKRYoARjgi0J4UWWBiCLY0CgMTgGwAouQ2DIqVAabJDnBWmAlPIZMB4A0Bag4DE6FA4BAGtsThBfgBCIA}{verify part (a) of this exercise with Lean}.
 \end{xca}
 
 \subsection*{Hints for Lean}
@@ -117,7 +117,7 @@ There are two ways to work with Lean:
 Once you are ready, you can start as follows:
 
 \begin{leancode}
-  import Mathlib.Algebra.Group.Basic
+  import Mathlib.Algebra.Group.Defs
 
   -- First define a class encoding the group homomorphism axiom.
   class GroupHom {G G' : Type} [Group G] [Group G']

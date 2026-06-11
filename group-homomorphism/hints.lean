@@ -1,4 +1,4 @@
-import Mathlib.Algebra.Group.Basic
+import Mathlib.Algebra.Group.Defs
 
 -- This is a one line comment.
 
@@ -30,7 +30,7 @@ https://leanprover-community.github.io/contribute/naming.html
 -/
 
 theorem unique_one {G : Type} [Group G]
-  (a : G) (h : (∀ b : G, (a * b = b * a) ∧ (a * b = a))) : a = 1 := by
+  (a : G) (h : (∀ b : G, (a * b = b) ∧ (b * a = b))) : a = 1 := by
     /-
     We tell Lean that we are stating a theorem by saying "theorem", and
     we give our theorem a name which can be referenced later. In this 
@@ -41,7 +41,7 @@ theorem unique_one {G : Type} [Group G]
     * a is an element of G. You can think of (a : G) as the equivalent of
     a ∈ G. This is again related to Lean using types instead of sets.
     * We have an hypothesis called "h" which says that for all elements
-    b ∈ G we have ab = ba and ab = a.
+    b ∈ G we have ab = b and ba = b.
 
     After the assumptions we state the conclusion of the theorem and
     separate it from the assumptions with the colon ":".
@@ -106,7 +106,7 @@ theorem unique_one {G : Type} [Group G]
       exact mul_inv_cancel a
       /-
       The exact tactic tells Lean that the current goal is precisely
-      achieved by applying the proposition mul_right_inv (a theorem which
+      achieved by applying the proposition mul_inv_cancel (a theorem which
       is already available in Lean's Mathlib library) to the element a.
       This resolves this auxiliary goal that we created to obtain h3,
       and now we can use the hypothesis h3 to prove the original goal.
