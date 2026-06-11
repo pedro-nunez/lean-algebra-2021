@@ -3,7 +3,6 @@ import Mathlib
 theorem euclidean_division (n m : Nat) (hm : m ≠ 0) :
     ∃! a : Nat, ∃! b : Nat, n = a * m + b ∧ b < m := by
   have hm' : m - 1 + 1 = m := by
-    -- Recall that when working with natural numbers in Lean m - 1 + 1 would be 1 if m = 0.
     apply Nat.sub_add_cancel
     apply Nat.succ_le_of_lt
     exact Nat.pos_of_ne_zero hm
