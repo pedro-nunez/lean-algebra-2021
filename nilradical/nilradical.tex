@@ -1,0 +1,134 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[british]{babel}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{libertine}
+\usepackage[libertine]{newtxmath}
+\usepackage[mathscr]{euscript}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usetikzlibrary{decorations.markings}
+\usepackage{float}
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ total={170mm,257mm},
+ left=20mm,
+ top=30mm,
+ }
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\urlstyle{same}
+\usepackage[noabbrev]{cleveref}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{listings}
+
+% Colors to match VS Code Lean 4 Light Theme
+\definecolor{keywordcolor}{rgb}{0.0, 0.0, 1.0}   % blue
+\definecolor{tacticcolor}{rgb}{0.0, 0.0, 1.0}    % blue
+\definecolor{commentcolor}{rgb}{0.0, 0.5, 0.0}   % green
+\definecolor{symbolcolor}{rgb}{0.0, 0.0, 0.0}    % black
+\definecolor{sortcolor}{rgb}{0.0, 0.0, 1.0}      % blue
+\definecolor{attributecolor}{rgb}{0.0, 0.0, 0.0} % black
+% Light gray background color
+\definecolor{codebg}{rgb}{0.97, 0.97, 0.97}
+
+\def\lstlanguagefiles{lstlean.tex}
+
+\newtcblisting{leancode}{
+  listing only,
+  listing options={
+    language=lean,
+    emph={sorry},
+    emphstyle=\color{red},
+    basicstyle=\ttfamily\footnotesize
+  },
+  colback=codebg,
+  colframe=codebg,
+  boxrule=0pt,
+  arc=3mm,
+  auto outer arc,
+  top=10pt,
+  bottom=10pt,
+  left=5pt,
+  right=5pt,
+  width=\textwidth,
+}
+
+\theoremstyle{definition}
+\newtheorem{innercustomthm}{Exercise}
+\newenvironment{xca}[1] {\renewcommand\theinnercustomthm{#1}\innercustomthm}
+  {\endinnercustomthm}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Lean Algebra Exercises{\renewcommand{\thefootnote}{\fnsymbol{footnote}}\footnotemark[2]}}
+\chead{Nilradical}
+\lhead{Pedro N\'{u}\~{n}ez}
+% \rfoot{Page \thepage}
+
+\title{Lean Algebra Exercise 6.4}
+\author{Pedro N\'{u}\~{n}ez}
+
+\setcounter{tocdepth}{1}
+\sloppy
+\makeatletter
+\hypersetup{
+  pdfauthor={\@author},
+  pdftitle={\@title},
+  colorlinks,
+  linkcolor=[rgb]{0.2,0.2,0.6},
+  citecolor=[rgb]{0.2,0.2,0.6},
+  urlcolor=[rgb]{0.2,0.2,0.6}}
+\makeatother
+
+\begin{document}
+
+\begin{xca}{6.4}
+  Let $R$ be a ring.
+  An element $x \in R$ is called \emph{nilpotent} if there exists a positive integer $n \in \mathbb{N}_{>0}$ such that $x^{n} = 0$.
+  Show that the set of all nilpotent elements in $R$ is an ideal.
+
+  You can try to \href{https://live.lean-lang.org/#codez=JYWwDg9gTgLgBAWQIYwBYBtgCMB0AlYAOwHMAVVAU2gE8cBJAEwqXRwCEkBnYAYwChQkWIhQZs%2BImUo0cAOWDpIMCoRjsuvPnwBuSKMCRZ0FOAAo8cAFxxS1MBQBUASjgBtAMIQQIAiTh4AXS1CJBAKTjAkHhNGZnQtJgAzOEIFKCQGXhYrOFjsi0sAXj4AbzgePX0KKCtCuBKADxyLAB9cznlFCGVVOAaAXz44OAAvaogAfTCQAHJauCxqIeG4AFpVuAAFKAgIZLQUOGB4HghVJCJOODQTMZ24CmMw1Rxl4c5oKCXhjIYpilm80WbzWG22u32qEOxyOVx46AgnAoDDgAFdCEwar9jsAzq8VnAPlAvstOCBUeh%2FoCigtvit1lsdntrlD4DDgHCEUiUejMYSKug9HByegYMAwJgKmK8SCiSTBnwVCi8uggA}{verify this exercise with Lean}.
+\end{xca}
+
+\subsection*{Hints for Lean}
+
+\begin{leancode}
+  import Mathlib.RingTheory.Ideal.Basic
+  import Mathlib.RingTheory.Nilpotent.Basic
+
+  variable (R : Type*) [CommRing R]
+
+  namespace Ideal
+
+  def nilradical : Ideal R :=
+  { carrier := {x : R | IsNilpotent x}
+    zero_mem' := by
+      -- Proof that it contains the zero element.
+      sorry
+    add_mem' := by
+      -- Proof that it is closed under addition.
+      sorry
+    smul_mem' := by
+      -- Proof that it is closed under scalar multiplication.
+      sorry
+  }
+
+  end Ideal
+\end{leancode}
+
+A \href{https://github.com/pedro-nunez/lean-algebra-2021/blob/master/nilradical/solution.lean}{solution} is available on the repository
+\begin{center}
+  \href{https://github.com/pedro-nunez/lean-algebra-2021}{https://github.com/pedro-nunez/lean-algebra-2021}.
+\end{center}
+
+{\renewcommand{\thefootnote}{\fnsymbol{footnote}}\footnotetext[2]{Exercises designed for the lecture \href{https://home.mathematik.uni-freiburg.de/arithgeom/lehre/ws21/azt}{\emph{Algebra and Number Theory}}, for which I was a teaching assistant.
+This was an introductory lecture on abstract algebra, polynomial rings and Galois theory, taught by Annette Huber-Klawitter at the University of Freiburg during the Winter Semester 2021/2022.}}
+
+\end{document}
