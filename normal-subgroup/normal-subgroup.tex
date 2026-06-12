@@ -99,46 +99,47 @@
     \item For all $g_{1}, g_{2} \in G$, $g_{1}g_{2} \in H$ if and only if $g_{2}g_{1} \in H$.
   \end{enumerate}
 
-  You can try to \href{https://live.lean-lang.org/#codez=JYWwDg9gTgLgBAWQIYwBYBtgCMB0BBdAcwFMsokcBxKCAVzBwGVatCb6cAhJAZ2AGMAUKEixEKDNhwAVJPxgCZAMTwBRQYIBuSKMCRZ0xOAG9KcAFxxpATzDEAvnADa1OmDiUAunAAUAOQs4ZlZ2d0oASg0AE2IAMzgAO2gQJHQAfSQLQTg4AAUad3MAXjhAACI4QkDKABoyuFRAv1rAYCJ6gHJG2sBEwgaAKgq4Esr%2B1DbouMTk1LSsLJz8iEKS8srLGt9yhssmuFbRzorAbwIATrgRs4GS0fC4QHIibI36g72O7e6GoZOL%2Ff7CSMEYvEklAUul%2BHM8gULMsBmtaptnu0DoQvudfoN2uMgVN0lEIQslnVCABGCoAJiqtR8e2RpN%2BFKuN0AKYS%2BGlvckXEkY1D%2FQwgFJwJBpESYYg8GYQ8r%2BQLBNhuDzhWrA0EZOABQBJhJMQdNZgFinAsNYHsAEjAaDw1YKeDxaOAYA9aAlYhB0HjldNMigrTa7Q8eNAoEbBGhiNBiCA4DBYkhiGl3ekbSF5eYHgAZYA8GDKNTOeOqnZ53VKnFpcEFkt4vzefWGh5RmNpVBITRGUmain6oUi4BiiV%2BOvR2NNltwCmagDM0INRpyOX9UEDA4bw6Mk81ABYp7XZ3B54ucvWh82jJvNaSazPZ3vL4e0rETRnUIIgA}{verify your solution to this exercise with Lean}.
+  You can try to \href{https://live.lean-lang.org/#codez=JYWwDg9gTgLgBAWQIYwBYBtgCMB0BBdAcwFMsokcBxKCAVzBwGVatCb6cAhJAZ2AGMAUKEixEKDNhwAVJPxgCZAMTwBRQYIBuSKMCRZ0xOAG9KcAFxxpATzDEAvnADa1OmDiUAunAAUAOQs4ZlZ2d0oASg0AE2IAMzgAO2gQJHQAfSQLQTg4AAUad3MAXjhAACI4QkDKABpfctRAv1rAYCI4VAByRtqGgCoKuBLKvo7wuEByImy6tq64Vo6ZoemS%2Bb7CSMEY%2BKSoFPSsLJz8iEKS8srLGqmGyybZts6b2sJAbwIATrhhj%2F6SwETCEfHJj56jM5g84Lc%2FgMKm8visKutNolkqk0vwDnkChZTv0LrVgY87vMCS93p9VlC%2Fu1onEkTsUVF0UcTmV%2BoQwZcfHMFl82RTUKNACmEvi5xM65N%2B%2FI0hhAKTgSDSIkwxB4aX25km5X8gWCbDcHnCtW2uwy4LggCTCWnG%2FYBYpwLDWSbABIwGg8U28Hi0cAwSa0BKxCDoBlGlGZFBynie72THjQKAOwRoYjQYggOAwWJIYhpEPpT0hPXqnIAGWAPBgyjUzlzJtuNethuR6TRdabaQZfm8tvtkwzWbSqCQmiMAEZzXAAExYuUK8BKlXW3uZ7OD4eT8cAZmnPZyOVjUHjS%2F7q6MW4tABZtw7d3B94ecn2V0OjJeLWPu9fd3fP4%2B0rEnWWqBAA}{verify your solution to this exercise with Lean}.
 \end{xca}
 
 \subsection*{Hints for Lean}
 
 \begin{leancode}
-import Mathlib.Algebra.Group.Subgroup.Basic
-import Mathlib.Tactic.TFAE
+  import Mathlib.Algebra.Group.Subgroup.Basic
+  import Mathlib.Tactic.TFAE
 
-variable {G : Type} [Group G] (N : Subgroup G)
+  variable {G : Type} [Group G] (N : Subgroup G)
 
-def normal_a :
-  Prop := ∀ g : G, ∀ h : N, ∃ h' : N, ↑h * g = g * h'
+  def normal_a :
+    Prop := ∀ g : G, (∀ h : N, ∃ h' : N, h * g = g * h') ∧
+    (∀ h : N, ∃ h' : N, g * h = h' * g)
 
-def normal_b :
-  Prop := ∀ g : G, (∀ h : N, ∃ h' : N, g⁻¹ * h * g = h') ∧
-  (∀ h : N, ∃ h' : N, ↑h = g⁻¹ * h' * g)
+  def normal_b :
+    Prop := ∀ g : G, (∀ h : N, ∃ h' : N, g⁻¹ * h * g = ↑h') ∧
+    (∀ h : N, ∃ h' : N, ↑h = g⁻¹ * h' * g)
 
-def normal_c :
-  Prop := ∀ g : G, ∀ h : N, ∃ h' : N, g⁻¹ * h * g = h'
+  def normal_c :
+    Prop := ∀ g : G, ∀ h : N, ∃ h' : N, g⁻¹ * h * g = ↑h'
 
-def normal_d :
-  Prop := ∀ g1 g2 : G, (∃ h : N, g1 * g2 = h) ↔ (∃ h : N, g2 * g1 = h)
+  def normal_d :
+    Prop := ∀ g g' : G, (∃ h : N, g * g' = ↑h) ↔ (∃ h : N, g' * g = ↑h)
 
-lemma a_implies_b :
-  ∀ (N : Subgroup G), normal_a N → normal_b N := by
-  intros N assumpt
-  unfold normal_a at assumpt
-  sorry
-
-theorem tfae_normal_subgroup :
-  List.TFAE [normal_a N, normal_b N, normal_c N, normal_d N] := by
-  tfae_have 1 → 2 := a_implies_b N
-  tfae_have 2 → 3 := by
+  lemma a_implies_b :
+    ∀ (N : Subgroup G), normal_a N → normal_b N := by
+    intros N assumpt
+    unfold normal_a at assumpt
     sorry
-  tfae_have 3 → 4 := by
-    sorry
-  tfae_have 4 → 1 := by
-    sorry
-  tfae_finish
+
+  theorem tfae_normal_subgroup :
+    List.TFAE [normal_a N, normal_b N, normal_c N, normal_d N] := by
+    tfae_have 1 → 2 := a_implies_b N
+    tfae_have 2 → 3 := by
+      sorry
+    tfae_have 3 → 4 := by
+      sorry
+    tfae_have 4 → 1 := by
+      sorry
+    tfae_finish
 \end{leancode}
 
 You may find the \href{https://leanprover-community.github.io/mathlib4_docs/Mathlib/Algebra/Group/Subgroup/Basic.html}{subgroup documentation} on mathlib helpful.

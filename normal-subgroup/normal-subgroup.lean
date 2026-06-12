@@ -4,17 +4,18 @@ import Mathlib.Tactic.TFAE
 variable {G : Type} [Group G] (N : Subgroup G)
 
 def normal_a :
-  Prop := ∀ g : G, ∀ h : N, ∃ h' : N, ↑h * g = g * h'
+  Prop := ∀ g : G, (∀ h : N, ∃ h' : N, h * g = g * h') ∧
+  (∀ h : N, ∃ h' : N, g * h = h' * g)
 
 def normal_b :
-  Prop := ∀ g : G, (∀ h : N, ∃ h' : N, g⁻¹ * h * g = h') ∧
+  Prop := ∀ g : G, (∀ h : N, ∃ h' : N, g⁻¹ * h * g = ↑h') ∧
   (∀ h : N, ∃ h' : N, ↑h = g⁻¹ * h' * g)
 
 def normal_c :
-  Prop := ∀ g : G, ∀ h : N, ∃ h' : N, g⁻¹ * h * g = h'
+  Prop := ∀ g : G, ∀ h : N, ∃ h' : N, g⁻¹ * h * g = ↑h'
 
 def normal_d :
-  Prop := ∀ g1 g2 : G, (∃ h : N, g1 * g2 = h) ↔ (∃ h : N, g2 * g1 = h)
+  Prop := ∀ g g' : G, (∃ h : N, g * g' = ↑h) ↔ (∃ h : N, g' * g = ↑h)
 
 lemma a_implies_b :
   ∀ (N : Subgroup G), normal_a N → normal_b N := by
