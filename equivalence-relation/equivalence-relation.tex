@@ -116,7 +116,7 @@
 \end{leancode}
 
 A relation $R$ on a set $M$ is usually defined as a subset of $M \times M$.
-In Lean, however, a relation on $M$ is defined as a function $M \to M \to $~{\ttfamily Prop}.
+In Lean, however, a relation on $M$ is defined as a function $M \to M \to \mathtt{Prop}$.
 The idea is that for each $x, y \in M$ we obtain a proposition $P(x,y)$ which is {\ttfamily true} precisely when $(x,y) \in R$.
 In our example, the function $\mathrm{Rel}$ sends $g \in G$ to the function that sends $g' \in G$ to the statement $g^{-1} \cdot g' \in H$.
 You can read more about this on
@@ -128,7 +128,7 @@ The {\ttfamily constructor} tactic splits the current goal into three subgoals,
 one for each defining property of an equivalence relation.
 The bullet points are syntax to separate the three subgoals.
 
-A \href{https://github.com/pedro-nunez/lean-algebra-2021/blob/master/equivalence-relation/solution.lean}{solution} is available on the repository
+A \href{https://github.com/pedro-nunez/lean-algebra-2021/blob/master/equivalence-relation/solution.lean}{solution} is available in the repository
 \begin{center}
   \href{https://github.com/pedro-nunez/lean-algebra-2021}{https://github.com/pedro-nunez/lean-algebra-2021}.
 \end{center}
